@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Orange Ventures | CHAT</title>
+    <link rel="icon" href="https://blog.fcamara.com.br/wp-content/uploads/2019/10/icon-fcamara.png" sizes="32x32">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="http://fcamara.com.br">
+            <img src="https://blog.fcamara.com.br/wp-content/uploads/2019/11/Logotipo-Grupo-FCamara-BR-300x66.png"
+                class="img-fluid" alt="">
+        </a>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form id="chat">
+                    <div class="form-group">
+
+                        <input type="text" class="form-control" name="username" id="username"
+                            placeholder="Digite seu usuário" />
+                    </div>
+
+                    <div class="messages"></div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="message" id="message"
+                            placeholder="Digite sua mensagem" />
+                    </div>
+                    <button class="btn btn-block" type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        let socket = io('http://localhost:3000');
+
+        socket.on('previousMessage', function (messages) {
+            for (message of messages) {
+                renderMessage(message)
+            }
+        });
+
+        socket.on('receveidMessage', function (message) {
+            renderMessage(message);
+        });
+
+        function renderMessage(message) {
+            let result = document.querySelector('.messages')
+            result.innerHTML = result.innerHTML + '<div class="message"><strong>' + message.author + '</strong>: ' + message.message + '</div>';
+        }
+
+        const chat = document.getElementById('chat');
+        chat.addEventListener('submit', event => {
+            event.preventDefault();
+
+            let author = document.querySelector('input[name=username]').value;
+            let message = document.querySelector('input[name=message]').value;
+
+            console.log('author')
+
+            if (author.length && message.length) {
+                console.log('yeyeye')
+                let messageObject = {
+                    author: author,
+                    message: message,
+                };
+
+                renderMessage(messageObject)
+
+                socket.emit('sendMessage', messageObject);
+
+                document.querySelector('input[name=message]').value = '';
+            } else {
+                swal("Ops!", "Campo usuário ou mensagem vazio...", "error");
+            }
+        })
+    </script>
+</body>
+
+</html>
