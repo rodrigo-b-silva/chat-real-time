@@ -46,8 +46,8 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
-        // let socket = io('http://192.168.0.223:3005');
-        let socket = io('http://localhost:3000');
+        let socket = io('https://chat-real-time-fcamara.herokuapp.com');
+        //let socket = io('http://localhost:3000');
 
         socket.on('previousMessage', function (messages) {
             for (message of messages) {
