@@ -46,6 +46,7 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
     <script type="text/javascript">
+        // let socket = io('http://192.168.0.223:3005');
         let socket = io('http://localhost:3000');
 
         socket.on('previousMessage', function (messages) {
@@ -70,10 +71,7 @@
             let author = document.querySelector('input[name=username]').value;
             let message = document.querySelector('input[name=message]').value;
 
-            console.log('author')
-
             if (author.length && message.length) {
-                console.log('yeyeye')
                 let messageObject = {
                     author: author,
                     message: message,
